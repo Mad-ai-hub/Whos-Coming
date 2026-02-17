@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who's Coming — Maddy & Nath</title>
+
+<!-- Google Fonts: classic serif pairing -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --linen: #f5f0e8;
+    --linen-dark: #ebe4d8;
+    --ink: #1a1a18;
+    --ink-soft: #3d3a35;
+    --ink-muted: #7a756c;
+    --ink-faint: #b5af a5;
+    --accent: #8b7d6b;
+    --accent-light: #c4b9a8;
+    --divider: #d9d1c4;
+    --white: #fdfcf9;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--linen);
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Linen texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b5afa5' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeDown 0.8s ease-out;
+  }
+
+  .monogram {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .header h1 .ampersand {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    font-style: italic;
+  }
+
+  .guest-count {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-top: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .divider-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+    max-width: 280px;
+  }
+
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--divider);
+  }
+
+  .divider-ornament span {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--accent-light);
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease-out 0.2s both;
+  }
+
+  .filter-btn {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 0.45rem 1.2rem;
+    border: 1px solid var(--divider);
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--ink-soft);
+  }
+
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--linen);
+  }
+
+  /* Search */
+  .search-wrap {
+    max-width: 400px;
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: fadeUp 0.8s ease-out 0.3s both;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    padding: 0.7rem 1rem 0.7rem 2.4rem;
+    border: 1px solid var(--divider);
+    background: var(--white);
+    color: var(--ink);
+    outline: none;
+    letter-spacing: 0.02em;
+    transition: border-color 0.3s ease;
+  }
+
+  .search-wrap input::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  .search-wrap input:focus {
+    border-color: var(--accent);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+  }
+
+  /* Guest list */
+  .guest-list {
+    animation: fadeUp 0.8s ease-out 0.4s both;
+  }
+
+  .page-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-btn {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--divider);
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .page-btn:hover:not(:disabled) {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .page-indicator {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink-muted);
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+
+  /* Guest card */
+  .guest-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--divider);
+    opacity: 0;
+    animation: fadeIn 0.4s ease-out forwards;
+    transition: background 0.3s ease;
+  }
+
+  .guest-card:first-child {
+    border-top: 1px solid var(--divider);
+  }
+
+  .guest-card:hover {
+    background: rgba(139, 125, 107, 0.04);
+  }
+
+  .guest-card-inner {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+  }
+
+  .guest-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+    min-width: fit-content;
+  }
+
+  .guest-separator {
+    color: var(--accent-light);
+    font-size: 0.8rem;
+    user-select: none;
+  }
+
+  .guest-detail {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .guest-role {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* No results */
+  .no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--divider);
+  }
+
+  .footer p {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--ink-muted);
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+
+  .venue-info {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.8rem;
+  }
+
+  /* Loading state */
+  .loading {
+    text-align: center;
+    padding: 4rem 1rem;
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--divider);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .loading p {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--ink-muted);
+    margin-top: 1rem;
+  }
+
+  /* Error state */
+  .error-state {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+
+  .error-state p {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  .error-state .retry-btn {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .error-state .retry-btn:hover {
+    background: var(--ink);
+    color: var(--linen);
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .container {
+      padding: 2rem 1.2rem 3rem;
+    }
+
+    .guest-card-inner {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .guest-separator {
+      display: none;
+    }
+
+    .filter-bar {
+      gap: 0.4rem;
+    }
+
+    .filter-btn {
+      font-size: 0.85rem;
+      padding: 0.35rem 0.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header">
+    <div class="monogram">M &nbsp; N</div>
+    <h1>Who's Coming</h1>
+    <p class="subtitle">Celebrating with us on Waiheke Island</p>
+    <p class="guest-count" id="guestCount"></p>
+    <div class="divider-ornament"><span>&</span></div>
+  </header>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all">Everyone</button>
+    <button class="filter-btn" data-filter="bride">Maddy's Side</button>
+    <button class="filter-btn" data-filter="groom">Nath's Side</button>
+    <button class="filter-btn" data-filter="both">Both</button>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon">&#9906;</span>
+    <input type="text" id="searchInput" placeholder="Search guests...">
+  </div>
+
+  <div class="guest-list" id="guestList">
+    <div class="loading" id="loadingState">
+      <div class="loading-spinner"></div>
+      <p>Gathering the guest list...</p>
+    </div>
+  </div>
+
+  <div class="page-controls" id="pageControls" style="display:none;">
+    <button class="page-btn" id="prevBtn" onclick="changePage(-1)">&#8592; Prev</button>
+    <span class="page-indicator" id="pageIndicator"></span>
+    <button class="page-btn" id="nextBtn" onclick="changePage(1)">Next &#8594;</button>
+  </div>
+
+  <footer class="footer">
+    <p>Seventeenth of April, 2027</p>
+    <div class="venue-info">Mudbrick Vineyard &middot; Waiheke Island, NZ</div>
+  </footer>
+</div>
+
+<script>
+// =============================================================
+// CONFIGURATION
+// =============================================================
+
+// ---- GOOGLE SHEET SETUP ----
+// 1. Create a Google Sheet with these column headers (Row 1):
+//    A: Name  |  B: Location  |  C: Role  |  D: Connection  |  E: Side
+//
+//    "Side" should be one of: bride, groom, both
+//
+// 2. Go to File > Share > Publish to web
+//    - Choose "Entire Document" and "CSV" format
+//    - Click Publish and copy the URL
+//
+// 3. Paste that URL below:
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSteRRgf48qrY-wA_pf1q9CwbvIkY96CdhwVBlRLdphEM17olwu5i1D1Y09q4WnShyX8NKe39W8WdW/pub?output=csv';
+
+// ---- OR USE LOCAL DATA ----
+// If you'd rather not use Google Sheets, just put your guests here
+// and leave GOOGLE_SHEET_CSV_URL empty.
+const LOCAL_GUESTS = [
+  { name: "Tatiana Carter", location: "South Carolina, USA", role: "Maddy's Bridesmaid", connection: "Bond University", side: "bride" },
+  { name: "Alex Anania", location: "Sydney, AUS", role: "Maddy's Bridesmaid", connection: "Childhood Friend", side: "bride" },
+  { name: "Justin Corbett", location: "Sydney, AUS", role: "Nath's Groomsman", connection: "Brother of the Groom", side: "groom" },
+  { name: "Emma Richards", location: "Melbourne, AUS", role: "Guest", connection: "University Friend", side: "bride" },
+  { name: "Tom Whitfield", location: "Brisbane, AUS", role: "Nath's Groomsman", connection: "School Friend", side: "groom" },
+  { name: "Sophie Laurent", location: "Auckland, NZ", role: "Guest", connection: "Work Colleague", side: "both" },
+  { name: "Liam Corbett", location: "Sydney, AUS", role: "Guest", connection: "Family of the Groom", side: "groom" },
+  { name: "Olivia Chen", location: "Gold Coast, AUS", role: "Maddy's Bridesmaid", connection: "Bond University", side: "bride" },
+  { name: "Daniel McCarthy", location: "London, UK", role: "Guest", connection: "Travel Friend", side: "both" },
+  { name: "Rachel Stevens", location: "Perth, AUS", role: "Guest", connection: "Family of the Bride", side: "bride" },
+  { name: "Marcus Hale", location: "Christchurch, NZ", role: "Guest", connection: "Cousin of the Groom", side: "groom" },
+  { name: "Isla Bennett", location: "Sydney, AUS", role: "Guest", connection: "Neighbour", side: "both" },
+];
+
+const GUESTS_PER_PAGE = 30;
+
+// =============================================================
+// APP STATE
+// =============================================================
+let allGuests = [];
+let filteredGuests = [];
+let currentPage = 1;
+let currentFilter = 'all';
+let searchTerm = '';
+
+// =============================================================
+// DATA LOADING
+// =============================================================
+async function loadGuests() {
+  if (GOOGLE_SHEET_CSV_URL) {
+    try {
+      const response = await fetch(GOOGLE_SHEET_CSV_URL);
+      if (!response.ok) throw new Error('Failed to fetch');
+      const csv = await response.text();
+      allGuests = parseCSV(csv);
+    } catch (err) {
+      console.error('Error loading Google Sheet:', err);
+      showError();
+      return;
+    }
+  } else {
+    // Use local data
+    allGuests = LOCAL_GUESTS;
+  }
+
+  // Sort alphabetically by surname
+  allGuests.sort((a, b) => {
+    const surnameA = a.name.split(' ').slice(-1)[0].toLowerCase();
+    const surnameB = b.name.split(' ').slice(-1)[0].toLowerCase();
+    return surnameA.localeCompare(surnameB);
+  });
+
+  applyFilters();
+}
+
+function parseCSV(csv) {
+  const lines = csv.trim().split('\n');
+  const guests = [];
+
+  // Skip header row
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    if (cols.length >= 4 && cols[0].trim()) {
+      guests.push({
+        name: cols[0].trim(),
+        location: cols[1] ? cols[1].trim() : '',
+        role: cols[2] ? cols[2].trim() : '',
+        connection: cols[3] ? cols[3].trim() : '',
+        side: cols[4] ? cols[4].trim().toLowerCase() : 'both'
+      });
+    }
+  }
+
+  return guests;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+// =============================================================
+// FILTERING & RENDERING
+// =============================================================
+function applyFilters() {
+  filteredGuests = allGuests.filter(guest => {
+    // Side filter
+    if (currentFilter !== 'all' && guest.side !== currentFilter) return false;
+
+    // Search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      return (
+        guest.name.toLowerCase().includes(term) ||
+        guest.location.toLowerCase().includes(term) ||
+        guest.role.toLowerCase().includes(term) ||
+        guest.connection.toLowerCase().includes(term)
+      );
+    }
+    return true;
+  });
+
+  currentPage = 1;
+  updateGuestCount();
+  renderPage();
+}
+
+function updateGuestCount() {
+  const countEl = document.getElementById('guestCount');
+  const total = allGuests.length;
+  const showing = filteredGuests.length;
+
+  if (showing === total) {
+    countEl.textContent = `${total} guests joining the celebration`;
+  } else {
+    countEl.textContent = `Showing ${showing} of ${total} guests`;
+  }
+}
+
+function renderPage() {
+  const listEl = document.getElementById('guestList');
+  const controlsEl = document.getElementById('pageControls');
+  const totalPages = Math.ceil(filteredGuests.length / GUESTS_PER_PAGE);
+  const start = (currentPage - 1) * GUESTS_PER_PAGE;
+  const end = start + GUESTS_PER_PAGE;
+  const pageGuests = filteredGuests.slice(start, end);
+
+  if (filteredGuests.length === 0) {
+    listEl.innerHTML = '<div class="no-results">No guests found</div>';
+    controlsEl.style.display = 'none';
+    return;
+  }
+
+  let html = '';
+  pageGuests.forEach((guest, i) => {
+    const delay = i * 0.04;
+    html += `
+      <div class="guest-card" style="animation-delay: ${delay}s;">
+        <div class="guest-card-inner">
+          <span class="guest-name">${escapeHtml(guest.name)}</span>
+          ${guest.location ? `<span class="guest-separator">&#8226;</span><span class="guest-detail">${escapeHtml(guest.location)}</span>` : ''}
+          ${guest.role ? `<span class="guest-separator">&#8226;</span><span class="guest-detail guest-role">${escapeHtml(guest.role)}</span>` : ''}
+          ${guest.connection ? `<span class="guest-separator">&#8226;</span><span class="guest-detail">${escapeHtml(guest.connection)}</span>` : ''}
+        </div>
+      </div>
+    `;
+  });
+
+  listEl.innerHTML = html;
+
+  // Page controls
+  if (totalPages > 1) {
+    controlsEl.style.display = 'flex';
+    document.getElementById('pageIndicator').textContent = `Page ${currentPage} of ${totalPages}`;
+    document.getElementById('prevBtn').disabled = currentPage <= 1;
+    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+  } else {
+    controlsEl.style.display = 'none';
+  }
+}
+
+function changePage(dir) {
+  const totalPages = Math.ceil(filteredGuests.length / GUESTS_PER_PAGE);
+  const newPage = currentPage + dir;
+  if (newPage >= 1 && newPage <= totalPages) {
+    currentPage = newPage;
+    renderPage();
+    // Scroll to top of list
+    document.getElementById('guestList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function showError() {
+  document.getElementById('guestList').innerHTML = `
+    <div class="error-state">
+      <p>Couldn't load the guest list right now.</p>
+      <button class="retry-btn" onclick="location.reload()">Try Again</button>
+    </div>
+  `;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// =============================================================
+// EVENT LISTENERS
+// =============================================================
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    applyFilters();
+  });
+});
+
+// Search input (debounced)
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchTerm = e.target.value;
+    applyFilters();
+  }, 200);
+});
+
+// =============================================================
+// INIT
+// =============================================================
+loadGuests();
+</script>
+
+</body>
+</html>
