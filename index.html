@@ -110,11 +110,65 @@ body::before {
   color: var(--accent-light);
 }
 
+/* Filters */
+.filters-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s ease-out 0.15s both;
+}
+
+.filter-select {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 2rem 0.45rem 0.8rem;
+  border: 1px solid var(--divider);
+  background: var(--white);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a756c' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+}
+
+.filter-select:focus { border-color: var(--accent); outline: none; }
+
+.filter-btn {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 0.45rem 1.2rem;
+  border: 1px solid var(--divider);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.filter-btn:hover { border-color: var(--accent); color: var(--ink-soft); }
+
+.filter-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--linen);
+}
+
+/* Search */
 .search-wrap {
   max-width: 360px;
   margin: 0 auto 2rem;
   position: relative;
-  animation: fadeUp 0.8s ease-out 0.2s both;
+  animation: fadeUp 0.8s ease-out 0.25s both;
 }
 
 .search-wrap input {
@@ -141,10 +195,15 @@ body::before {
   font-size: 0.9rem;
 }
 
-.guest-list { animation: fadeUp 0.8s ease-out 0.3s both; }
+/* Guest list */
+.guest-list { animation: fadeUp 0.8s ease-out 0.35s both; }
 
 .guest-card {
-  padding: 1rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  padding: 0.9rem 0;
   border-bottom: 1px solid var(--divider);
   opacity: 0;
   animation: fadeIn 0.4s ease-out forwards;
@@ -154,24 +213,26 @@ body::before {
 .guest-card:first-child { border-top: 1px solid var(--divider); }
 .guest-card:hover { background: rgba(139, 125, 107, 0.04); }
 
-.guest-card-inner {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.3rem 1rem;
-}
-
 .guest-name {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--ink);
 }
 
-.guest-sep { color: var(--accent-light); font-size: 0.8rem; user-select: none; }
-.guest-location { font-size: 1rem; color: var(--ink-muted); }
-.guest-role { font-size: 0.95rem; font-style: italic; color: var(--accent); }
+.guest-location {
+  font-size: 1rem;
+  color: var(--ink-muted);
+}
 
+.guest-role {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--accent);
+  text-align: right;
+}
+
+/* Pagination */
 .page-controls {
   display: flex;
   justify-content: center;
@@ -199,6 +260,7 @@ body::before {
 
 .page-indicator { font-size: 0.95rem; color: var(--ink-muted); font-style: italic; }
 
+/* States */
 .no-results, .loading, .error-state {
   text-align: center;
   padding: 3rem 1rem;
@@ -233,6 +295,7 @@ body::before {
 
 .retry-btn:hover { background: var(--ink); color: var(--linen); }
 
+/* Footer */
 .footer {
   text-align: center;
   margin-top: 3rem;
@@ -251,15 +314,23 @@ body::before {
   margin-top: 0.8rem;
 }
 
+/* Animations */
 @keyframes fadeDown { from { opacity:0; transform:translateY(-15px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeUp { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes spin { to { transform:rotate(360deg); } }
 
+/* Responsive */
 @media (max-width: 600px) {
   .container { padding: 2rem 1.2rem 3rem; }
-  .guest-card-inner { flex-direction: column; gap: 0.1rem; }
-  .guest-sep { display: none; }
+  .guest-card {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+  .guest-role { text-align: left; }
+  .filters-wrap { gap: 0.5rem; }
+  .filter-select, .filter-btn { font-size: 0.85rem; padding: 0.35rem 1.8rem 0.35rem 0.6rem; }
+  .filter-btn { padding: 0.35rem 0.8rem; }
 }
 </style>
 </head>
@@ -272,6 +343,14 @@ body::before {
     <p class="guest-count" id="guestCount"></p>
     <div class="divider-ornament"><span>&</span></div>
   </header>
+
+  <div class="filters-wrap" id="filtersWrap">
+    <select class="filter-select" id="locationFilter">
+      <option value="all">All Locations</option>
+    </select>
+    <button class="filter-btn active" id="partyAll" onclick="setPartyFilter('all')">Everyone</button>
+    <button class="filter-btn" id="partyOnly" onclick="setPartyFilter('party')">Wedding Party</button>
+  </div>
 
   <div class="search-wrap">
     <span class="search-icon">&#9906;</span>
@@ -303,9 +382,11 @@ body::before {
 // Google Sheet columns: Name | Where They're Travelling From | Special Role
 // =============================================================
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSteRRgf48qrY-wA_pf1q9CwbvIkY96CdhwVBlRLdphEM17olwu5i1D1Y09q4WnShyX8NKe39W8WdW/pub?output=csv';
-const PER_PAGE = 30;
+const PER_PAGE = 20;
 
 let allGuests = [], filtered = [], page = 1, search = '';
+let locationFilter = 'all';
+let partyFilter = 'all';
 
 async function load() {
   try {
@@ -318,6 +399,7 @@ async function load() {
     return;
   }
   allGuests.sort((a, b) => a.name.split(' ').slice(-1)[0].toLowerCase().localeCompare(b.name.split(' ').slice(-1)[0].toLowerCase()));
+  buildLocationFilter();
   applyFilters();
 }
 
@@ -326,7 +408,7 @@ function parseCSV(csv) {
   for (let i = 1; i < lines.length; i++) {
     const c = parseLine(lines[i]);
     if (c.length >= 1 && c[0].trim()) {
-      guests.push({ name: c[0].trim(), location: (c[1]||'').trim(), role: (c[2]||'').trim() });
+      guests.push({ name: c[0].trim(), location: (c[1] || '').trim(), role: (c[2] || '').trim() });
     }
   }
   return guests;
@@ -343,31 +425,74 @@ function parseLine(line) {
   return r;
 }
 
+// =============================================================
+// FILTERS
+// =============================================================
+function buildLocationFilter() {
+  const select = document.getElementById('locationFilter');
+  const locations = [...new Set(allGuests.map(g => g.location).filter(l => l))].sort();
+  locations.forEach(loc => {
+    const opt = document.createElement('option');
+    opt.value = loc;
+    opt.textContent = loc;
+    select.appendChild(opt);
+  });
+}
+
+document.getElementById('locationFilter').addEventListener('change', function () {
+  locationFilter = this.value;
+  applyFilters();
+});
+
+function setPartyFilter(val) {
+  partyFilter = val;
+  document.getElementById('partyAll').classList.toggle('active', val === 'all');
+  document.getElementById('partyOnly').classList.toggle('active', val === 'party');
+  applyFilters();
+}
+
 function applyFilters() {
   const t = search.toLowerCase();
-  filtered = allGuests.filter(g => !t || g.name.toLowerCase().includes(t) || g.location.toLowerCase().includes(t) || g.role.toLowerCase().includes(t));
+  filtered = allGuests.filter(g => {
+    if (locationFilter !== 'all' && g.location !== locationFilter) return false;
+    if (partyFilter === 'party' && !g.role) return false;
+    if (t && !(g.name.toLowerCase().includes(t) || g.location.toLowerCase().includes(t) || g.role.toLowerCase().includes(t))) return false;
+    return true;
+  });
   page = 1;
   render();
 }
 
+// =============================================================
+// RENDER
+// =============================================================
 function render() {
   const list = document.getElementById('guestList');
   const ctrl = document.getElementById('pageControls');
   const countEl = document.getElementById('guestCount');
   const total = allGuests.length, showing = filtered.length;
-  countEl.textContent = showing === total ? total + ' guests joining the celebration' : 'Showing ' + showing + ' of ' + total + ' guests';
 
-  if (!filtered.length) { list.innerHTML = '<div class="no-results">No guests found</div>'; ctrl.style.display = 'none'; return; }
+  if (showing === total) {
+    countEl.textContent = total + ' guests joining the celebration';
+  } else {
+    countEl.textContent = 'Showing ' + showing + ' of ' + total + ' guests';
+  }
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="no-results">No guests found</div>';
+    ctrl.style.display = 'none';
+    return;
+  }
 
   const pages = Math.ceil(filtered.length / PER_PAGE);
   const slice = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
   let h = '';
   slice.forEach((g, i) => {
-    h += '<div class="guest-card" style="animation-delay:' + i * 0.04 + 's"><div class="guest-card-inner">';
+    h += '<div class="guest-card" style="animation-delay:' + i * 0.04 + 's">';
     h += '<span class="guest-name">' + esc(g.name) + '</span>';
-    if (g.location) h += '<span class="guest-sep">&#8226;</span><span class="guest-location">' + esc(g.location) + '</span>';
-    if (g.role) h += '<span class="guest-sep">&#8226;</span><span class="guest-role">' + esc(g.role) + '</span>';
-    h += '</div></div>';
+    h += '<span class="guest-location">' + esc(g.location) + '</span>';
+    h += '<span class="guest-role">' + esc(g.role) + '</span>';
+    h += '</div>';
   });
   list.innerHTML = h;
 
@@ -376,16 +501,23 @@ function render() {
     document.getElementById('pageIndicator').textContent = 'Page ' + page + ' of ' + pages;
     document.getElementById('prevBtn').disabled = page <= 1;
     document.getElementById('nextBtn').disabled = page >= pages;
-  } else { ctrl.style.display = 'none'; }
+  } else {
+    ctrl.style.display = 'none';
+  }
 }
 
 function changePage(d) {
   const np = page + d, pages = Math.ceil(filtered.length / PER_PAGE);
-  if (np >= 1 && np <= pages) { page = np; render(); document.getElementById('guestList').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  if (np >= 1 && np <= pages) {
+    page = np;
+    render();
+    document.getElementById('guestList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+// Search (debounced)
 let timer;
 document.getElementById('searchInput').addEventListener('input', e => {
   clearTimeout(timer);
