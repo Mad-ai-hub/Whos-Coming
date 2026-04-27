@@ -573,13 +573,16 @@ nameInput.addEventListener('input', function () {
     allGuests.forEach(g => {
       const fullName = (g.firstName + ' ' + g.lastName).toLowerCase();
       if (fullName.includes(val)) {
-        const partyKey = g.party || (g.firstName + g.lastName);
+        const partyKey = g.party ? g.party : (g.firstName + '_' + g.lastName);
         if (!seenParties.has(partyKey)) {
           seenParties.add(partyKey);
-          const partyMembers = allGuests.filter(m => m.party && m.party === g.party);
+          // If guest has a party, find all members; otherwise just this guest
+          const partyMembers = g.party
+            ? allGuests.filter(m => m.party === g.party)
+            : [g];
           matches.push({
             guest: g,
-            partyMembers: partyMembers.length > 1 ? partyMembers : [g]
+            partyMembers: partyMembers
           });
         }
       }
@@ -592,8 +595,8 @@ nameInput.addEventListener('input', function () {
     }
 
     suggestionsEl.innerHTML = matches.map((m, i) => {
-      const names = m.partyMembers.map(p => p.firstName + ' ' + p.lastName).join(', ');
-      const hint = m.partyMembers.length > 1 ? '<span class="party-hint">(' + m.partyMembers.length + ' guests)</span>' : '';
+      const names = m.partyMembers.map(p => p.firstName + ' ' + p.lastName).join(' & ');
+      const hint = m.partyMembers.length > 1 ? '<span class="party-hint">&mdash; ' + m.partyMembers.length + ' guests</span>' : '';
       return '<div class="suggestion-item" onclick="selectParty(' + i + ')" data-index="' + i + '">' + esc(names) + ' ' + hint + '</div>';
     }).join('');
 
